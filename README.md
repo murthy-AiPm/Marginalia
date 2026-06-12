@@ -6,6 +6,10 @@ Marginalia TV is a spoiler-safe story-state recap prototype for viewers returnin
 
 **Executive Summary:** [Executive Summary](https://prototypemarginalia.netlify.app/marginalia-tv-executive-summary.html)
 
+<img width="809" height="476" alt="image" src="https://github.com/user-attachments/assets/d86ec5ed-4250-4075-882f-7c43746ecf33" />
+<img width="835" height="517" alt="image" src="https://github.com/user-attachments/assets/20cd7cc5-5c1f-4124-9905-7d1164cba6c4" />
+
+
 ## Product Bet
 
 Viewers do not only forget what happened. They lose the current story state: who has power, who knows the secret, who betrayed whom, who is captured, and what unresolved thread matters before the next episode.
