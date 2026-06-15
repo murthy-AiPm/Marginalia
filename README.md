@@ -34,7 +34,7 @@ It includes:
 - Secrets and power-state table
 - Ready-to-watch checklist
 - Exit survey for spoiler leaks, wrong details, fabricated details, and readiness
-- Visible data coverage gates, structured source facts, and claim-level provenance for release-week checkpoints
+- Behind-the-scenes coverage gates, structured source facts, and claim-level provenance for release-week checkpoints
 
 ## Why This Exists
 

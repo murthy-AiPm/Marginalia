@@ -94,6 +94,7 @@ export default function RecapPage({ params }: Props) {
         />
 
         <StorySummary
+          series={recap.series}
           items={recap.seasonSummaries}
           allEpisodes={recap.episodeSummaries}
           visibleEpisodes={visibleEpisodes}
@@ -101,7 +102,11 @@ export default function RecapPage({ params }: Props) {
           sourceNote={recap.sourceNote}
         />
 
-        <EpisodeTimeline items={visibleEpisodes} />
+        <EpisodeTimeline
+          items={visibleEpisodes}
+          boundarySeason={boundary.season}
+          nextEpisodeLabel={nextEpisode?.code ?? recap.nextEpisode}
+        />
 
         {selectedStoryState ? (
           <>

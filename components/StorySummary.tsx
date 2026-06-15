@@ -1,6 +1,7 @@
 import type { EpisodeSummary, SeasonSummary } from "@/lib/fixtures";
 
 type Props = {
+  series: string;
   items: SeasonSummary[];
   allEpisodes: EpisodeSummary[];
   visibleEpisodes: EpisodeSummary[];
@@ -12,6 +13,7 @@ type Props = {
 };
 
 export default function StorySummary({
+  series,
   items,
   allEpisodes,
   visibleEpisodes,
@@ -29,7 +31,7 @@ export default function StorySummary({
     <section>
       <header className="mb-4">
         <h2 className="serif text-[24px] font-semibold tracking-tight text-[var(--color-ink)]">
-          Previously on The Boys
+          Previously on {series}
         </h2>
         <p className="text-[13px] text-[var(--color-ink-muted)] mt-1 max-w-[760px]">
           A bounded season-by-season plot refresh before the relationship and

@@ -6,7 +6,7 @@ import Question, { type Answer } from "./Question";
 const QUESTIONS = [
   "Did anything in the recap feel made up?",
   "Did any relationship or power-state detail look wrong?",
-  "Did anything feel like a spoiler from Season 5?",
+  "Did anything feel like a future-episode spoiler?",
   "Would you have started the next episode without this recap?",
 ] as const;
 

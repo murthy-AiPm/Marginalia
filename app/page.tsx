@@ -64,7 +64,7 @@ export default function Landing() {
               href="/app/login"
               className="inline-flex items-center gap-2 text-[14px] bg-[var(--color-accent)] text-white rounded-md px-4 py-2.5 hover:bg-[var(--color-accent-hover)]"
             >
-              Try with The Boys
+              Try the demo
               <svg
                 width="14"
                 height="14"
@@ -88,8 +88,8 @@ export default function Landing() {
           </div>
 
           <div className="mt-4 text-[11px] text-[var(--color-ink-faint)]">
-            Demo seat - drops you into a watchlist with The Boys ready and
-            three additional shows staged as future coverage.
+            Demo seat - drops you into a watchlist with House of the Dragon and
+            The Boys ready.
           </div>
         </div>
 
@@ -100,7 +100,7 @@ export default function Landing() {
               <span className="w-2.5 h-2.5 rounded-full bg-[var(--color-line-strong)]" />
               <span className="w-2.5 h-2.5 rounded-full bg-[var(--color-line-strong)]" />
               <span className="ml-3 text-[11px] text-[var(--color-ink-faint)]">
-                marginalia.app / recap / the-boys-s4-finale
+                marginalia.app / recap / house-of-the-dragon-s2
               </span>
             </div>
             <div className="px-5 py-2.5 border-b border-[var(--color-line-strong)] bg-[var(--color-accent-soft)] flex items-center gap-3">
@@ -108,7 +108,7 @@ export default function Landing() {
               <span className="serif text-[14px] text-[var(--color-ink)]">
                 Showing what is known through{" "}
                 <em className="not-italic font-semibold">
-                  S04E08 - Season Four Finale
+                  S02E08 - The Queen Who Ever Was
                 </em>
                 .
               </span>
@@ -119,12 +119,12 @@ export default function Landing() {
                   Story-state recap
                 </div>
                 <div className="serif text-[22px] font-semibold tracking-tight text-[var(--color-ink)]">
-                  Map the players before S05E01
+                  Map the players before S03E01
                 </div>
                 <p className="mt-2 text-[13px] leading-6 text-[var(--color-ink-muted)]">
-                  See Butcher, Homelander, Ryan, Neuman, Sage, A-Train, and the
-                  team in one bounded map. Filter by ally, enemy, family,
-                  control, betrayal, or threat.
+                  See Rhaenyra, Alicent, Daemon, Aegon, Aemond, Helaena, and
+                  the new dragonriders in one bounded map. Filter by ally,
+                  enemy, family, control, betrayal, or threat.
                 </p>
               </div>
               <div className="p-6 text-left">

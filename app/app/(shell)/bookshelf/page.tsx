@@ -16,8 +16,9 @@ export default function BookshelfPage() {
           </h1>
           <p className="text-[14px] text-[var(--color-ink-muted)] mt-1 max-w-[680px]">
             Each card shows what you finished, what comes next, and whether a
-            bounded recap is ready. The demo focuses on The Boys through the
-            season 4 finale, with Season 5 kept out of scope.
+            bounded recap is ready. The demo includes release-ready paths for
+            House of the Dragon and The Boys, with future episodes kept out of
+            scope.
           </p>
         </div>
         <BookshelfGrid />

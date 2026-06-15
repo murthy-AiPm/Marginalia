@@ -2,9 +2,15 @@ import type { EpisodeSummary } from "@/lib/fixtures";
 
 type Props = {
   items: EpisodeSummary[];
+  boundarySeason: number;
+  nextEpisodeLabel: string;
 };
 
-export default function EpisodeTimeline({ items }: Props) {
+export default function EpisodeTimeline({
+  items,
+  boundarySeason,
+  nextEpisodeLabel,
+}: Props) {
   const seasons = groupBySeason(items);
 
   return (
@@ -14,8 +20,9 @@ export default function EpisodeTimeline({ items }: Props) {
           Episode timeline
         </h2>
         <p className="text-[13px] text-[var(--color-ink-muted)] mt-1 max-w-[760px]">
-          Episode-by-episode recall through Season 4. Season 4 is open by
-          default because it is the freshest boundary before Season 5.
+          Episode-by-episode recall through Season {boundarySeason}. Season{" "}
+          {boundarySeason} is open by default because it is the freshest
+          boundary before {nextEpisodeLabel}.
         </p>
       </header>
 
@@ -23,7 +30,7 @@ export default function EpisodeTimeline({ items }: Props) {
         {seasons.map(({ season, episodes }) => (
           <details
             key={season}
-            open={season === 4}
+            open={season === boundarySeason}
             className="rounded-lg border border-[var(--color-line)] bg-[var(--color-surface)]"
           >
             <summary className="cursor-pointer select-none px-4 py-3 text-[14px] font-medium text-[var(--color-ink)]">
