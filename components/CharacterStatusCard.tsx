@@ -17,8 +17,24 @@ export default function CharacterStatusCard({
         <dt className="text-[var(--color-ink-faint)]">Motivation</dt>
         <dd className="text-[var(--color-ink)]">{status.motivation}</dd>
 
+        {status.knowledge && (
+          <>
+            <dt className="text-[var(--color-ink-faint)]">Knowledge</dt>
+            <dd className="text-[var(--color-ink)]">{status.knowledge}</dd>
+          </>
+        )}
+
         <dt className="text-[var(--color-ink-faint)]">Risk</dt>
         <dd className="text-[var(--color-ink)]">{status.risk}</dd>
+
+        {status.establishedBy && (
+          <>
+            <dt className="text-[var(--color-ink-faint)]">Source</dt>
+            <dd className="text-[var(--color-ink-muted)]">
+              {status.establishedBy}
+            </dd>
+          </>
+        )}
       </dl>
     </div>
   );

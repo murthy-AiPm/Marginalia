@@ -20,8 +20,9 @@ type Props = {
 export default function RecapPage({ params }: Props) {
   const { seriesSlug } = use(params);
   const recap = getRecap(seriesSlug);
-
-  const [boundary, setBoundary] = useState({ season: 4, episode: 8 });
+  const [boundary, setBoundary] = useState(
+    recap?.defaultBoundary ?? { season: 1, episode: 1 }
+  );
   const [exitOpen, setExitOpen] = useState(false);
 
   if (!recap) {
@@ -79,6 +80,11 @@ export default function RecapPage({ params }: Props) {
             </em>
             .
           </p>
+          {recap.releaseContext && (
+            <p className="text-[13px] leading-6 text-[var(--color-ink-muted)] max-w-[700px]">
+              {recap.releaseContext}
+            </p>
+          )}
         </header>
 
         <BoundarySelector

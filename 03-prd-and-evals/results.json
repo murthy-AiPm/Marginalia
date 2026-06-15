@@ -1,44 +1,58 @@
 {
   "summary": {
-    "eval_run": "2026-05-20",
+    "eval_run": "2026-06-15",
     "target": "Marginalia TV prototype",
     "artifact_set": "Marginalia/tv-shows/03-prd-and-evals",
-    "total_cases": 7,
-    "executable_cases": 6,
+    "rubric": "rubric.json",
+    "total_cases": 8,
+    "executable_cases": 7,
     "not_executable_cases": 1,
     "error_cases": 0,
-    "overall_executable_weighted": 4.93,
+    "overall_executable_weighted": 4.96,
     "status": "ui_prototype_passes_executable_cases_generation_eval_untested",
     "per_criterion": {
       "spoiler_boundary": {
         "avg": 5.0,
-        "n": 6,
+        "n": 7,
         "weight": "Critical"
       },
       "hallucination_grounding": {
         "avg": 5.0,
-        "n": 6,
+        "n": 7,
         "weight": "Critical"
       },
       "story_state_correctness": {
         "avg": 5.0,
-        "n": 6,
+        "n": 7,
         "weight": "Critical"
       },
       "structural_completeness": {
-        "avg": 4.83,
-        "n": 6,
+        "avg": 4.86,
+        "n": 7,
         "weight": "High"
       },
       "watch_readiness": {
-        "avg": 4.83,
-        "n": 6,
+        "avg": 4.86,
+        "n": 7,
         "weight": "High"
       }
     },
-    "threshold_read": "Executable UI cases pass. Full suite ship-read is blocked until hard-02-the-boys-sparse-facts can run against a generation path that accepts constrained known_source_facts."
+    "threshold_read": "Executable UI cases pass the rubric threshold. Full suite ship-read remains blocked only for generation-path validation because hard-02-the-boys-sparse-facts requires runtime known_source_facts input."
   },
   "results": [
+    {
+      "id": "adversarial-01-season-five-leak-probe",
+      "difficulty": "adversarial",
+      "status": "pass",
+      "scores": {
+        "spoiler_boundary": 5,
+        "hallucination_grounding": 5,
+        "story_state_correctness": 5,
+        "structural_completeness": 5,
+        "watch_readiness": 5
+      },
+      "notes": "The static prototype has no prompt-injection surface and no Season 5 outcome content. The boundary banner and authored S04E08 state stay within the declared boundary."
+    },
     {
       "id": "easy-01-the-boys-s4-finale",
       "difficulty": "easy",
@@ -66,32 +80,6 @@
       "notes": "Selecting S03E08 filters summaries and timeline before Season 4, and S03E08 story-state modules are available."
     },
     {
-      "id": "realistic-01-the-boys-season-five-prep",
-      "difficulty": "realistic",
-      "status": "pass",
-      "scores": {
-        "spoiler_boundary": 5,
-        "hallucination_grounding": 5,
-        "story_state_correctness": 5,
-        "structural_completeness": 5,
-        "watch_readiness": 5
-      },
-      "notes": "The S04E08 state captures the required readiness anchors: Homelander/Calhoun power shift, Butcher with the virus, Ryan/Mallory, The Boys split/captured, Annie escape, A-Train exposure, and Soldier Boy alive in custody."
-    },
-    {
-      "id": "realistic-02-unsupported-show-no-fabrication",
-      "difficulty": "realistic",
-      "status": "pass",
-      "scores": {
-        "spoiler_boundary": 5,
-        "hallucination_grounding": 5,
-        "story_state_correctness": 5,
-        "structural_completeness": 4,
-        "watch_readiness": 4
-      },
-      "notes": "Unsupported shows remain visible but disabled/coming soon. This prevents fabrication, but structural completeness and watch readiness score 4 because no full recap is available."
-    },
-    {
       "id": "hard-01-the-boys-user-note-season-five-leak",
       "difficulty": "hard",
       "status": "pass",
@@ -102,7 +90,7 @@
         "structural_completeness": 5,
         "watch_readiness": 5
       },
-      "notes": "The current UI has no free-text user-note path, so it does not echo or act on Season 5 spoiler requests."
+      "notes": "The current static UI has no free-text user-note path, so it does not echo or act on Season 5 spoiler requests."
     },
     {
       "id": "hard-02-the-boys-sparse-facts",
@@ -118,8 +106,8 @@
       "notes": "This test requires a generation pipeline that accepts constrained known_source_facts. The static UI cannot run that input."
     },
     {
-      "id": "adversarial-01-season-five-leak-probe",
-      "difficulty": "adversarial",
+      "id": "realistic-01-the-boys-season-five-prep",
+      "difficulty": "realistic",
       "status": "pass",
       "scores": {
         "spoiler_boundary": 5,
@@ -128,7 +116,33 @@
         "structural_completeness": 5,
         "watch_readiness": 5
       },
-      "notes": "The prototype has no prompt-injection surface and no Season 5 outcome content."
+      "notes": "The S04E08 state captures the required readiness anchors: Homelander/Calhoun power shift, Butcher with the virus, Ryan/Mallory, The Boys split/captured, Annie escape, A-Train exposure, and Soldier Boy alive in custody."
+    },
+    {
+      "id": "realistic-02-house-of-the-dragon-release-week",
+      "difficulty": "realistic",
+      "status": "pass",
+      "scores": {
+        "spoiler_boundary": 5,
+        "hallucination_grounding": 5,
+        "story_state_correctness": 5,
+        "structural_completeness": 5,
+        "watch_readiness": 5
+      },
+      "notes": "The S02E08 House of the Dragon recap is registered as a release-week path before S03E01. It includes the boundary banner, season summaries, episode timeline, relationship map with provenance, character status with knowledge state, secrets/power state with who-knows fields, and ready-to-watch anchors. No Season 3 episode events, trailer beats, reviews, or book-forward future outcomes are exposed."
+    },
+    {
+      "id": "realistic-03-unsupported-show-no-fabrication",
+      "difficulty": "realistic",
+      "status": "pass",
+      "scores": {
+        "spoiler_boundary": 5,
+        "hallucination_grounding": 5,
+        "story_state_correctness": 5,
+        "structural_completeness": 4,
+        "watch_readiness": 4
+      },
+      "notes": "Attack on Titan remains visible but disabled/coming soon. This prevents fabrication, but structural completeness and watch readiness score 4 because no full recap is available."
     }
   ]
 }

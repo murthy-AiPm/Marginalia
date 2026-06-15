@@ -14,7 +14,10 @@ Most recap products summarize plot. Marginalia TV tests a sharper product idea:
 
 ## What The Prototype Shows
 
-The current demo is seeded around *The Boys* after `S04E08`, before `S05E01`.
+The current demo has two seeded paths:
+
+- *House of the Dragon* after `S02E08`, before `S03E01`, framed around the June 21, 2026 Season 3 premiere.
+- *The Boys* after `S04E08`, before `S05E01`.
 
 It includes:
 
@@ -25,6 +28,7 @@ It includes:
 - Secrets and power-state table
 - Ready-to-watch checklist
 - Exit survey for spoiler leaks, wrong details, fabricated details, and readiness
+- Visible data coverage gates, structured source facts, and claim-level provenance for release-week checkpoints
 
 ## Why This Exists
 
@@ -63,7 +67,7 @@ Generated-output eval result:
 - Story-state correctness: **4.71 / 5**
 - Watch readiness: **3.86 / 5**
 
-The eval showed the model could stay spoiler-safe, but sparse source facts reduced completeness. The next product move is not to make the model more confident. It is to improve the data strategy: structured, episode-bounded facts with coverage gates before generation.
+The eval showed the model could stay spoiler-safe, but sparse source facts reduced completeness. The next product move was not to make the model more confident. It was to improve the data strategy: structured, episode-bounded facts with coverage gates before generation. The House of the Dragon path now demonstrates that strategy in the prototype.
 
 ## Tech Stack
 

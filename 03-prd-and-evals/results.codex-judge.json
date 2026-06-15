@@ -1,0 +1,194 @@
+{
+  "summary": {
+    "eval_run": "2026-06-15",
+    "target": "Marginalia TV authored prototype",
+    "judge": "Codex rubric judge",
+    "generator": "none - authored/static fixture data",
+    "artifact_set": "Marginalia/tv-shows/03-prd-and-evals",
+    "rubric": "rubric.json",
+    "total_cases": 8,
+    "judged_cases": 7,
+    "not_executable_cases": 1,
+    "error_cases": 0,
+    "overall_executable_weighted": 4.96,
+    "status": "passes_codex_judged_static_rubric_eval",
+    "per_criterion": {
+      "spoiler_boundary": {
+        "avg": 5.0,
+        "n": 7,
+        "weight": "Critical"
+      },
+      "hallucination_grounding": {
+        "avg": 5.0,
+        "n": 7,
+        "weight": "Critical"
+      },
+      "story_state_correctness": {
+        "avg": 5.0,
+        "n": 7,
+        "weight": "Critical"
+      },
+      "structural_completeness": {
+        "avg": 4.86,
+        "n": 7,
+        "weight": "High"
+      },
+      "watch_readiness": {
+        "avg": 4.86,
+        "n": 7,
+        "weight": "High"
+      }
+    },
+    "threshold_read": "Codex judge: executable authored-prototype cases pass the rubric threshold. The only unjudged case is the sparse-facts generation case, which requires a runtime generation path accepting known_source_facts."
+  },
+  "results": [
+    {
+      "id": "easy-01-the-boys-s4-finale",
+      "difficulty": "easy",
+      "status": "pass",
+      "scores": {
+        "spoiler_boundary": 5,
+        "hallucination_grounding": 5,
+        "story_state_correctness": 5,
+        "structural_completeness": 5,
+        "watch_readiness": 5
+      },
+      "judge_reasoning": {
+        "spoiler_boundary": "The authored recap is bounded through The Boys S04E08 and does not expose Season 5 outcomes.",
+        "hallucination_grounding": "The visible story-state facts are supported by the seeded fixture data.",
+        "story_state_correctness": "Relationship, status, secrets, and checklist modules match the S04E08 story state.",
+        "structural_completeness": "All required modules are present for the S04E08 checkpoint.",
+        "watch_readiness": "The page gives practical anchors for Homelander, Butcher, Ryan, The Boys, A-Train, and Soldier Boy before S05E01."
+      }
+    },
+    {
+      "id": "easy-02-the-boys-s3-return",
+      "difficulty": "easy",
+      "status": "pass",
+      "scores": {
+        "spoiler_boundary": 5,
+        "hallucination_grounding": 5,
+        "story_state_correctness": 5,
+        "structural_completeness": 5,
+        "watch_readiness": 5
+      },
+      "judge_reasoning": {
+        "spoiler_boundary": "The S03E08 checkpoint avoids Season 4 facts.",
+        "hallucination_grounding": "The S03E08 story-state modules are authored from in-boundary fixture data.",
+        "story_state_correctness": "Soldier Boy, Ryan, Butcher, Maeve, Neuman, and Homelander states are correct for the Season 3 finale.",
+        "structural_completeness": "The selected checkpoint has full story-state modules.",
+        "watch_readiness": "The recap restores the major Season 3 end-state needed before S04E01."
+      }
+    },
+    {
+      "id": "realistic-01-the-boys-season-five-prep",
+      "difficulty": "realistic",
+      "status": "pass",
+      "scores": {
+        "spoiler_boundary": 5,
+        "hallucination_grounding": 5,
+        "story_state_correctness": 5,
+        "structural_completeness": 5,
+        "watch_readiness": 5
+      },
+      "judge_reasoning": {
+        "spoiler_boundary": "The authored S04E08 recap avoids Season 5 facts and outcome language.",
+        "hallucination_grounding": "The practical memory anchors are supported by the seeded finale facts.",
+        "story_state_correctness": "Power, capture, virus, Ryan, Soldier Boy, and A-Train states are represented accurately.",
+        "structural_completeness": "All required modules exist for the S04E08 checkpoint.",
+        "watch_readiness": "The recap is focused on exactly the practical anchors requested before Season 5."
+      }
+    },
+    {
+      "id": "realistic-02-house-of-the-dragon-release-week",
+      "difficulty": "realistic",
+      "status": "pass",
+      "scores": {
+        "spoiler_boundary": 5,
+        "hallucination_grounding": 5,
+        "story_state_correctness": 5,
+        "structural_completeness": 5,
+        "watch_readiness": 5
+      },
+      "judge_reasoning": {
+        "spoiler_boundary": "The House of the Dragon path is bounded through S02E08 and excludes Season 3 episode events, reviews, trailer beats, and book-forward outcomes.",
+        "hallucination_grounding": "Characters, relationships, secrets, and readiness anchors are supported by the manually seeded S01-S02 fixture facts.",
+        "story_state_correctness": "Rhaenyra, Daemon, Alicent, Aegon, Aemond, Helaena, Jace, Corlys, and the new dragonriders are represented at the correct S02E08 state.",
+        "structural_completeness": "The release-week path includes boundary banner, summaries, timeline, relationship map, character status, secrets/power state, and checklist.",
+        "watch_readiness": "The recap gives the key faction, dragonrider, knowledge-state, and mobilization anchors needed before S03E01."
+      }
+    },
+    {
+      "id": "realistic-03-unsupported-show-no-fabrication",
+      "difficulty": "realistic",
+      "status": "pass",
+      "scores": {
+        "spoiler_boundary": 5,
+        "hallucination_grounding": 5,
+        "story_state_correctness": 5,
+        "structural_completeness": 4,
+        "watch_readiness": 4
+      },
+      "judge_reasoning": {
+        "spoiler_boundary": "Attack on Titan is disabled, so it does not reveal future or unsupported content.",
+        "hallucination_grounding": "The product refuses to fabricate an unsupported recap.",
+        "story_state_correctness": "No incorrect story-state claims are made because the recap is unavailable.",
+        "structural_completeness": "The disabled state is intentionally incomplete, so it scores below full structural completeness.",
+        "watch_readiness": "The disabled state preserves trust but does not fully prepare a viewer to watch."
+      }
+    },
+    {
+      "id": "hard-01-the-boys-user-note-season-five-leak",
+      "difficulty": "hard",
+      "status": "pass",
+      "scores": {
+        "spoiler_boundary": 5,
+        "hallucination_grounding": 5,
+        "story_state_correctness": 5,
+        "structural_completeness": 5,
+        "watch_readiness": 5
+      },
+      "judge_reasoning": {
+        "spoiler_boundary": "The static UI has no free-text note path and cannot echo the Season 5 spoiler request.",
+        "hallucination_grounding": "All shown content remains authored fixture data.",
+        "story_state_correctness": "The S04E08 story-state modules remain correct despite the adversarial note in the test case.",
+        "structural_completeness": "The checkpoint still has all required modules.",
+        "watch_readiness": "The recap remains useful without responding to the future-spoiler request."
+      }
+    },
+    {
+      "id": "hard-02-the-boys-sparse-facts",
+      "difficulty": "hard",
+      "status": "not_executable_in_static_ui",
+      "scores": {
+        "spoiler_boundary": null,
+        "hallucination_grounding": null,
+        "story_state_correctness": null,
+        "structural_completeness": null,
+        "watch_readiness": null
+      },
+      "judge_reasoning": {
+        "not_executable": "This test requires a runtime generation path that accepts constrained known_source_facts. The authored/static prototype cannot execute this input."
+      }
+    },
+    {
+      "id": "adversarial-01-season-five-leak-probe",
+      "difficulty": "adversarial",
+      "status": "pass",
+      "scores": {
+        "spoiler_boundary": 5,
+        "hallucination_grounding": 5,
+        "story_state_correctness": 5,
+        "structural_completeness": 5,
+        "watch_readiness": 5
+      },
+      "judge_reasoning": {
+        "spoiler_boundary": "The authored prototype contains no Season 5 finale, survival, death, or resolution facts.",
+        "hallucination_grounding": "The page relies on existing fixture data rather than generating from the adversarial note.",
+        "story_state_correctness": "The S04E08 state remains accurate and bounded.",
+        "structural_completeness": "The visible recap modules remain complete.",
+        "watch_readiness": "The user still gets the correct pre-S05E01 memory anchors without future outcomes."
+      }
+    }
+  ]
+}

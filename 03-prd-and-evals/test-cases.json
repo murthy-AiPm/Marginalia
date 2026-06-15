@@ -219,15 +219,106 @@
     }
   },
   {
-    "id": "realistic-02-unsupported-show-no-fabrication",
-    "description": "Unsupported show should not fabricate a full recap.",
+    "id": "realistic-02-house-of-the-dragon-release-week",
+    "description": "Viewer finished House of the Dragon Season 2 and wants a bounded story-state recap before the June 21 Season 3 premiere.",
     "difficulty": "realistic",
     "input_data": {
       "show": "House of the Dragon",
-      "last_watched": "S01E10 - The Black Queen",
-      "next_episode": "S02E01",
-      "user_note": "I need the family tree and factions.",
+      "last_watched": "S02E08 - The Queen Who Ever Was",
+      "next_episode": "S03E01",
+      "user_note": "Season 3 is about to start. I need the factions, dragonriders, and who knows what without trailer or book spoilers.",
+      "coverage_gate": {
+        "status": "full",
+        "availableFacts": 31,
+        "requiredFacts": 24,
+        "modules": [
+          "Previously On",
+          "Episode Timeline",
+          "Story-State Map",
+          "Character Status",
+          "Secrets / Power State",
+          "Ready-to-Watch Checklist"
+        ]
+      },
+      "known_source_facts": [
+        "Rhaenyra is on Dragonstone after Season 2 with new dragon leverage from dragonseeds.",
+        "Daemon sees a vision at Harrenhal and swears fealty to Rhaenyra in S02E08.",
+        "Alicent secretly travels to Dragonstone in S02E08 and offers a path to surrender King's Landing.",
+        "Rhaenyra tells Alicent that Aegon must die for her claim to be secure.",
+        "Aegon is badly injured after Rook's Rest and unable to rule actively.",
+        "Larys moves the injured Aegon out of King's Landing as a survival play.",
+        "Aemond becomes Prince Regent after Aegon's injury.",
+        "Aemond destroys Sharp Point with Vhagar in S02E08 after the Black dragon advantage grows.",
+        "Helaena refuses Aemond's demand that she ride Dreamfyre into battle.",
+        "Helaena speaks with prophetic certainty about Aemond and Aegon in S02E08.",
+        "Addam claims Seasmoke under Rhaenyra's side.",
+        "Hugh claims Vermithor during the Red Sowing.",
+        "Ulf claims Silverwing during the Red Sowing.",
+        "Jace is uneasy because the dragonseed plan helps Rhaenyra but threatens old bloodline legitimacy.",
+        "Corlys serves as Rhaenyra's Hand and remains central to naval power.",
+        "Alyn rebuffs Corlys's reconciliation attempts in S02E08.",
+        "Otto is glimpsed as captive in S02E08, but the supplied facts do not establish who holds him.",
+        "Armies and fleets from the Reach, North, Westerlands, Riverlands, House Velaryon, and the Triarchy mobilize for war by the S02E08 finale montage."
+      ],
+      "ground_truth_summary": "Through S02E08, Rhaenyra has stronger dragon leverage and Daemon's renewed fealty, Alicent secretly offers a path into King's Landing, Aegon is injured and being moved by Larys, Aemond rules as Prince Regent with Vhagar but faces new Black dragonriders, Helaena refuses to become Aemond's weapon, Corlys is Hand, and multiple armies and fleets are mobilizing.",
+      "ground_truth_relationships": [
+        "Rhaenyra --romantic/ally-- Daemon: Daemon swears fealty in S02E08",
+        "Rhaenyra --unknown-- Alicent: former friends secretly negotiating a surrender path",
+        "Rhaenyra --enemy-- Aegon: rival claimant; Rhaenyra says Aegon must die",
+        "Rhaenyra --enemy-- Aemond: Aemond killed Lucerys and rules the Greens' war posture",
+        "Aemond --betrayal-- Aegon: Aegon is injured at Rook's Rest after Aemond burns through the fight",
+        "Aemond --control-- Helaena: Aemond pressures Helaena to ride Dreamfyre; she refuses",
+        "Larys --ally-- Aegon: Larys moves Aegon out of King's Landing",
+        "Rhaenyra --family-- Jace: mother/heir relationship strained by dragonseed legitimacy",
+        "Rhaenyra --ally-- Corlys: Corlys serves as Hand",
+        "Rhaenyra --ally-- Addam/Hugh/Ulf: new dragonriders expand her power"
+      ],
+      "ground_truth_secrets": [
+        "Alicent's surrender offer is known to Alicent and Rhaenyra.",
+        "Aegon's escape is known to Aegon and Larys from the supplied facts.",
+        "Daemon's vision and renewed fealty are established at Harrenhal.",
+        "The new dragonriders are Addam, Hugh, and Ulf.",
+        "Helaena refuses Aemond's order to use Dreamfyre.",
+        "Otto is captive, but the supplied facts do not establish who holds him."
+      ],
+      "ground_truth_character_status": [
+        "Rhaenyra: on Dragonstone, stronger through new dragonriders and Daemon's oath.",
+        "Daemon: at Harrenhal, newly sworn to Rhaenyra.",
+        "Alicent: secretly negotiating surrender outside Green council control.",
+        "Aegon: injured and being moved by Larys.",
+        "Aemond: Prince Regent with Vhagar, dangerous and frustrated.",
+        "Helaena: refuses Aemond's military command and has prophetic knowledge.",
+        "Jace: uneasy about dragonseeds and legitimacy.",
+        "Corlys: Hand to Rhaenyra and naval power broker."
+      ],
+      "ground_truth_ready_to_watch": [],
+      "boundary_facts_in_scope": [],
+      "boundary_facts_out_of_scope": [
+        "Any Season 3 episode events",
+        "Any Season 3 review details",
+        "Any trailer-only scenes",
+        "Any Fire & Blood future plot outcomes",
+        "The outcome of the next battle",
+        "Which characters survive Season 3"
+      ]
+    }
+  },
+  {
+    "id": "realistic-03-unsupported-show-no-fabrication",
+    "description": "Unsupported show should not fabricate a full recap.",
+    "difficulty": "realistic",
+    "input_data": {
+      "show": "Attack on Titan",
+      "last_watched": "S03E22",
+      "next_episode": "Final Chapters",
+      "user_note": "I need the mythology and factions.",
       "known_source_facts": [],
+      "coverage_gate": {
+        "status": "insufficient",
+        "availableFacts": 0,
+        "requiredFacts": 24,
+        "modules": []
+      },
       "ground_truth_summary": "Because no bounded source facts are supplied, the product should not generate a substantive recap.",
       "ground_truth_relationships": [],
       "ground_truth_secrets": [],
@@ -235,7 +326,7 @@
       "ground_truth_ready_to_watch": [],
       "boundary_facts_in_scope": [],
       "boundary_facts_out_of_scope": [
-        "Any House of the Dragon facts not present in known_source_facts",
+        "Any Attack on Titan facts not present in known_source_facts",
         "Any invented faction state"
       ]
     }

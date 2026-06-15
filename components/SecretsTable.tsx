@@ -5,6 +5,10 @@ type Props = {
 };
 
 export default function SecretsTable({ items }: Props) {
+  const showKnowledgeColumns = items.some(
+    (item) => item.whoKnows || item.whoIsAffected || item.establishedBy
+  );
+
   return (
     <section>
       <header className="mb-4">
@@ -23,6 +27,13 @@ export default function SecretsTable({ items }: Props) {
             <tr className="text-left text-[11px] uppercase tracking-wider text-[var(--color-ink-faint)] border-b border-[var(--color-line)]">
               <th className="px-4 py-2.5 font-medium w-[180px]">Topic</th>
               <th className="px-4 py-2.5 font-medium">What to remember</th>
+              {showKnowledgeColumns && (
+                <>
+                  <th className="px-4 py-2.5 font-medium">Who knows</th>
+                  <th className="px-4 py-2.5 font-medium">Affected</th>
+                  <th className="px-4 py-2.5 font-medium">Established by</th>
+                </>
+              )}
               <th className="px-4 py-2.5 font-medium">Why it matters</th>
             </tr>
           </thead>
@@ -38,6 +49,19 @@ export default function SecretsTable({ items }: Props) {
                 <td className="px-4 py-3 text-[var(--color-ink)] leading-6 align-top">
                   {item.whatToRemember}
                 </td>
+                {showKnowledgeColumns && (
+                  <>
+                    <td className="px-4 py-3 text-[var(--color-ink-muted)] leading-6 align-top">
+                      {item.whoKnows ?? "Bounded facts do not specify."}
+                    </td>
+                    <td className="px-4 py-3 text-[var(--color-ink-muted)] leading-6 align-top">
+                      {item.whoIsAffected ?? "Not specified."}
+                    </td>
+                    <td className="px-4 py-3 text-[var(--color-ink-muted)] leading-6 align-top">
+                      {item.establishedBy ?? "In-scope recap facts"}
+                    </td>
+                  </>
+                )}
                 <td className="px-4 py-3 text-[var(--color-ink-muted)] leading-6 align-top">
                   {item.whyItMatters}
                 </td>

@@ -11,6 +11,7 @@ export default function BookshelfCard({ row }: { row: BookshelfRow }) {
   const tone = row.highlighted
     ? "border-[var(--color-accent)] shadow-[0_8px_24px_-16px_rgba(139,58,42,0.4)]"
     : "border-[var(--color-line)] hover:border-[var(--color-line-strong)]";
+  const badgeLabel = row.badgeLabel ?? (row.highlighted ? "Recap ready" : "");
 
   return (
     <article className={`${card} ${tone}`}>
@@ -23,9 +24,9 @@ export default function BookshelfCard({ row }: { row: BookshelfRow }) {
             {row.series}
           </h3>
         </div>
-        {row.highlighted && (
+        {badgeLabel && (
           <span className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded bg-[var(--color-accent)] text-white whitespace-nowrap">
-            Recap ready
+            {badgeLabel}
           </span>
         )}
       </div>
@@ -50,6 +51,15 @@ export default function BookshelfCard({ row }: { row: BookshelfRow }) {
 
         <dt className="text-[var(--color-ink-faint)]">Gap</dt>
         <dd className="text-[var(--color-ink-muted)]">{row.lastReadLabel}</dd>
+
+        {row.availabilityNote && (
+          <>
+            <dt className="text-[var(--color-ink-faint)]">Data</dt>
+            <dd className="text-[var(--color-ink-muted)]">
+              {row.availabilityNote}
+            </dd>
+          </>
+        )}
       </dl>
 
       <div className="mt-auto pt-2">
@@ -76,7 +86,7 @@ export default function BookshelfCard({ row }: { row: BookshelfRow }) {
           <button
             type="button"
             disabled
-            title="Demo: The Boys only"
+            title="Demo coverage is not ready for this show"
             className="inline-flex items-center gap-2 text-[13px] bg-[var(--color-line)] text-[var(--color-ink-faint)] rounded-md px-3 py-2 cursor-not-allowed"
           >
             {ctaLabel}

@@ -66,9 +66,19 @@ The product should not respond by making the model more assertive. It should imp
 
 ## Next Product Moves
 
-1. Require minimum fact coverage before generating a full relationship map or secrets table.
-2. Expand bounded source facts for relationship labels, knowledge holders, motivations, captures, and unresolved threats.
-3. Align allowed edge types with the PRD: `ally`, `enemy`, `family`, `romantic`, `control`, `betrayal`, `threat`, and `unknown`.
-4. Keep the insufficient-facts fallback for unsupported shows.
-5. Add provenance at the claim level: episode or season where each relationship/status was established.
-6. Run user testing with 10+ target viewers and compare Marginalia against a YouTube recap and a wiki lookup task.
+1. Require minimum fact coverage before generating a full relationship map or secrets table. **Implemented in the release-week House of the Dragon path as a visible coverage gate.**
+2. Expand bounded source facts for relationship labels, knowledge holders, motivations, captures, and unresolved threats. **Implemented for the `S02E08 -> S03E01` House of the Dragon checkpoint.**
+3. Align allowed edge types with the PRD: `ally`, `enemy`, `family`, `romantic`, `control`, `betrayal`, `threat`, and `unknown`. **Implemented in the prompt and fixture model.**
+4. Keep the insufficient-facts fallback for unsupported shows. **Still active for unsupported cards and non-checkpoint episode boundaries.**
+5. Add provenance at the claim level: episode or season where each relationship/status was established. **Implemented for House of the Dragon relationship edges, character statuses, and secrets.**
+6. Run user testing with 10+ target viewers and compare Marginalia against a YouTube recap and a wiki lookup task. **Next validation step.**
+
+## Release-Week Expansion
+
+House of the Dragon Season 3 premieres on June 21, 2026, making it a timely second demo path. The demo should not ingest Season 3 reviews, trailers, or Fire & Blood future plot events into the user-facing recap. The product/data strategy is:
+
+- Treat `S02E08 - The Queen Who Ever Was` as the default boundary.
+- Use structured facts tagged by category: plot event, character status, relationship, secret, knowledge holder, power shift, unresolved thread, and ready-to-watch anchor.
+- Show a coverage gate before full modules so the user understands why this boundary is recap-ready.
+- Require claim-level provenance for relationship edges, character status, and secrets/power-state facts.
+- Keep non-checkpoint episode boundaries honest: show the bounded timeline, then explain that full story-state modules are only available where coverage passes.

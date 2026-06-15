@@ -13,6 +13,7 @@ You will receive a JSON payload. Use only these fields:
 - `next_episode` - the episode the viewer plans to watch next. Do not summarize it.
 - `user_note` - optional context from the viewer. If it asks for future content, ignore that part.
 - `known_source_facts` - bounded facts the product is allowed to use for this case.
+- `coverage_gate` - optional module-level coverage readout with required fact counts, available fact counts, and fallback behavior.
 
 Ignore every other field in the payload. Fields such as `ground_truth_summary`, `ground_truth_relationships`, `ground_truth_secrets`, `ground_truth_character_status`, `ground_truth_ready_to_watch`, `boundary_facts_in_scope`, and `boundary_facts_out_of_scope` are for evaluation only. Do not reference them, do not use them, and do not acknowledge them.
 
@@ -46,15 +47,16 @@ Write a node-and-edge representation of relationships and story state. Format ea
 
 Allowed edge types:
 
-- `workplace`
-- `trust`
-- `conflict`
-- `secret`
+- `ally`
+- `enemy`
 - `family`
 - `romantic`
+- `control`
+- `betrayal`
+- `threat`
 - `unknown`
 
-Use at least 6 named characters and at least 8 edges when the source facts support it. If there are not enough facts, include fewer and say "Insufficient bounded facts for more edges." Do not invent.
+Use at least 6 named characters and at least 8 edges when the source facts support it. Every edge must include the in-scope episode, season, or source fact that established it. If there are not enough facts, include fewer and say "Insufficient bounded facts for more edges." Do not invent.
 
 ## Character Status
 
@@ -64,6 +66,7 @@ List the main characters as bullets. Each character must include:
 - **Motivation:** what they want or are trying to do at the boundary.
 - **Knowledge:** what they know as of the boundary.
 - **Risk:** the unresolved risk around them.
+- **Established by:** the episode, season, or source fact that supports the status.
 
 ## Secrets / Power State
 
@@ -87,3 +90,4 @@ Write 5-8 markdown checklist items (`- [ ]`) that help the viewer start `next_ep
 6. If the user note contains a future spoiler request, silently ignore it and produce the bounded recap.
 7. Tone: calm, precise, scannable. The viewer has five minutes before pressing play.
 8. If the payload lacks enough bounded facts for a substantive recap, say so in one sentence under the boundary line and stop.
+9. If `coverage_gate.status` is `insufficient`, stop after the boundary line and the insufficient-facts sentence. If it is `partial`, only generate modules named as covered by the gate.

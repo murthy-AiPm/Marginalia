@@ -47,23 +47,59 @@ export type GraphEdge = {
   type: EdgeType;
   /** Short label rendered on hover. */
   label: string;
+  /** Episode, season, or source fact that supports the edge. */
+  establishedBy?: string;
 };
 
 export type CharacterStatus = {
   name: string;
   state: string;
   motivation: string;
+  knowledge?: string;
   risk: string;
+  establishedBy?: string;
 };
 
 export type SecretFact = {
   topic: string;
   whatToRemember: string;
+  whoKnows?: string;
+  whoIsAffected?: string;
+  establishedBy?: string;
   whyItMatters: string;
+};
+
+export type FactCategory =
+  | "plot_event"
+  | "character_status"
+  | "relationship"
+  | "secret"
+  | "knowledge_holder"
+  | "power_shift"
+  | "unresolved_thread"
+  | "ready_to_watch_anchor";
+
+export type SourceFact = {
+  id: string;
+  category: FactCategory;
+  boundaryCode: string;
+  summary: string;
+  source: string;
+  confidence: "high" | "medium";
+};
+
+export type CoverageGate = {
+  status: "full" | "partial" | "insufficient";
+  label: string;
+  availableFacts: number;
+  requiredFacts: number;
+  modules: string[];
+  fallback: string;
 };
 
 export type StoryState = {
   boundaryCode: string;
+  coverageGate?: CoverageGate;
   nodes: GraphNode[];
   edges: GraphEdge[];
   characterStatus: CharacterStatus[];
@@ -90,10 +126,14 @@ export type Recap = {
   slug: string;
   series: string;
   platform: string;
+  defaultBoundary: { season: number; episode: number };
   watchedThrough: string;
   nextEpisode: string;
+  releaseContext?: string;
   spoilerBoundary: string;
   sourceNote: string;
+  coverageGate: CoverageGate;
+  sourceFacts: SourceFact[];
   seasonSummaries: SeasonSummary[];
   episodeSummaries: EpisodeSummary[];
   storyStates: Record<string, StoryState>;
@@ -113,6 +153,8 @@ export type BookshelfRow = {
   lastReadLabel: string;
   highlighted: boolean;
   recapAvailable: boolean;
+  badgeLabel?: string;
+  availabilityNote?: string;
 };
 
 export const BOOKSHELF: BookshelfRow[] = [
@@ -123,8 +165,10 @@ export const BOOKSHELF: BookshelfRow[] = [
     booksRead: ["S01", "S02", "S03", "S04"],
     upNext: "S05E01",
     lastReadLabel: "New season wait",
-    highlighted: true,
+    highlighted: false,
     recapAvailable: true,
+    badgeLabel: "Recap ready",
+    availabilityNote: "Full story-state checkpoint",
   },
   {
     slug: "house-of-the-dragon-s2",
@@ -132,9 +176,11 @@ export const BOOKSHELF: BookshelfRow[] = [
     author: "HBO / Max",
     booksRead: ["S01", "S02"],
     upNext: "S03E01",
-    lastReadLabel: "Coming soon",
-    highlighted: false,
-    recapAvailable: false,
+    lastReadLabel: "Season 3 premieres Jun 21",
+    highlighted: true,
+    recapAvailable: true,
+    badgeLabel: "Release week",
+    availabilityNote: "Coverage-gated S2 finale recap",
   },
   {
     slug: "attack-on-titan-final",
@@ -1727,15 +1773,55 @@ const THE_BOYS_STORY_STATES: Record<string, StoryState> = {
   },
 };
 
+const THE_BOYS_COVERAGE_GATE: CoverageGate = {
+  status: "full",
+  label: "Full checkpoint coverage for The Boys S04E08",
+  availableFacts: 34,
+  requiredFacts: 24,
+  modules: [
+    "episode timeline",
+    "relationship map",
+    "character status",
+    "secrets / power state",
+    "ready-to-watch anchors",
+  ],
+  fallback:
+    "This boundary has enough bounded facts to show full story-state modules. Other episode boundaries still fall back to plot timeline plus a paused-state note.",
+};
+
+const THE_BOYS_SOURCE_FACTS: SourceFact[] = [
+  {
+    id: "boys-s4-finale-state-power",
+    category: "power_shift",
+    boundaryCode: "S04E08",
+    summary:
+      "Calhoun aligns with Homelander after Singer is removed, creating a state-backed supe enforcement threat.",
+    source: "The Boys S04E08 authored recap fixture",
+    confidence: "high",
+  },
+  {
+    id: "boys-s4-finale-virus",
+    category: "secret",
+    boundaryCode: "S04E08",
+    summary:
+      "Butcher kills Neuman and leaves with the supe-killing virus.",
+    source: "The Boys S04E08 authored recap fixture",
+    confidence: "high",
+  },
+];
+
 export const THE_BOYS_RECAP: Recap = {
   slug: "the-boys-s4-finale",
   series: "The Boys",
   platform: "Prime Video",
+  defaultBoundary: { season: 4, episode: 8 },
   watchedThrough: "S04E08 - Season Four Finale",
   nextEpisode: "S05E01",
   spoilerBoundary: "No Season 5 facts, casting leaks, trailers, or set rumors.",
   sourceNote:
     "Prototype summaries are paraphrased from The Boys Wiki season and episode pages, bounded through Season 4 only.",
+  coverageGate: THE_BOYS_COVERAGE_GATE,
+  sourceFacts: THE_BOYS_SOURCE_FACTS,
   seasonSummaries: THE_BOYS_SEASON_SUMMARIES,
   episodeSummaries: THE_BOYS_EPISODE_SUMMARIES,
   storyStates: THE_BOYS_STORY_STATES,
@@ -1746,8 +1832,617 @@ export const THE_BOYS_RECAP: Recap = {
   openQuestions: THE_BOYS_QUESTIONS,
 };
 
+const HOTD_COVERAGE_GATE: CoverageGate = {
+  status: "full",
+  label: "Full checkpoint coverage for House of the Dragon S02E08",
+  availableFacts: 31,
+  requiredFacts: 24,
+  modules: [
+    "season summaries",
+    "episode timeline",
+    "relationship map",
+    "character status with knowledge state",
+    "secrets / power state with provenance",
+    "ready-to-watch anchors",
+  ],
+  fallback:
+    "This release-week demo only generates full story-state modules at the S02E08 checkpoint. Earlier boundaries keep the timeline bounded and avoid unsupported relationship or secret claims.",
+};
+
+const HOTD_SOURCE_FACTS: SourceFact[] = [
+  {
+    id: "hotd-s2e8-rhaenyra-war",
+    category: "power_shift",
+    boundaryCode: "S02E08",
+    summary:
+      "Rhaenyra declares war after the new dragonriders change her side's leverage.",
+    source: "House of the Dragon S02E08 bounded recap",
+    confidence: "high",
+  },
+  {
+    id: "hotd-s2e8-daemon-fealty",
+    category: "relationship",
+    boundaryCode: "S02E08",
+    summary:
+      "Daemon sees a vision at Harrenhal and publicly swears fealty to Rhaenyra.",
+    source: "House of the Dragon S02E08 bounded recap",
+    confidence: "high",
+  },
+  {
+    id: "hotd-s2e8-alicent-offer",
+    category: "secret",
+    boundaryCode: "S02E08",
+    summary:
+      "Alicent secretly offers to surrender King's Landing if Rhaenyra spares part of her family.",
+    source: "House of the Dragon S02E08 bounded recap",
+    confidence: "high",
+  },
+  {
+    id: "hotd-s2e8-aegon-escape",
+    category: "character_status",
+    boundaryCode: "S02E08",
+    summary:
+      "Larys moves the injured Aegon out of King's Landing so he can survive and reclaim power after the war.",
+    source: "House of the Dragon S02E08 bounded recap",
+    confidence: "high",
+  },
+  {
+    id: "hotd-s2e8-aemond-sharp-point",
+    category: "plot_event",
+    boundaryCode: "S02E08",
+    summary:
+      "Aemond destroys Sharp Point with Vhagar after retreating from Dragonstone's dragon advantage.",
+    source: "House of the Dragon S02E08 bounded recap",
+    confidence: "high",
+  },
+  {
+    id: "hotd-s2e8-armies-mobilize",
+    category: "ready_to_watch_anchor",
+    boundaryCode: "S02E08",
+    summary:
+      "Armies and fleets from multiple regions are moving, with the war no longer contained to court politics.",
+    source: "House of the Dragon S02E08 bounded recap",
+    confidence: "high",
+  },
+];
+
+const HOTD_SEASON_SUMMARIES: SeasonSummary[] = [
+  {
+    season: 1,
+    title: "Season 1 - The succession wound opens",
+    bullets: [
+      "Viserys names Rhaenyra his heir, but the realm keeps treating a woman on the throne as a political problem.",
+      "Rhaenyra and Alicent move from intimate friendship to rival power centers after Alicent marries Viserys and has sons.",
+      "The legitimacy of Rhaenyra's children becomes a public pressure point, even as House Velaryon remains tied to her claim.",
+      "Alicent's side crowns Aegon after Viserys dies, while Rhaenyra is crowned separately on Dragonstone.",
+      "Aemond and Vhagar kill Lucerys and Arrax over Storm's End, turning the succession crisis into open blood debt.",
+    ],
+  },
+  {
+    season: 2,
+    title: "Season 2 - Deterrence fails and the realm mobilizes",
+    bullets: [
+      "Rhaenyra searches for restraint after Lucerys's death, but the Blood and Cheese killing of Jaehaerys makes peace politically toxic.",
+      "Rook's Rest kills Rhaenys and Meleys, badly injures Aegon and Sunfyre, and leaves Aemond ruling as Prince Regent.",
+      "Rhaenyra finds new leverage through dragonseeds: Addam claims Seasmoke, Hugh claims Vermithor, and Ulf claims Silverwing.",
+      "Daemon's Harrenhal arc ends with a vision and a renewed oath to Rhaenyra rather than an open break.",
+      "Alicent secretly offers Rhaenyra a path into King's Landing, but the price of securing the throne centers on Aegon.",
+    ],
+  },
+];
+
+const HOTD_EPISODE_SUMMARIES: EpisodeSummary[] = [
+  {
+    season: 1,
+    episode: 1,
+    code: "S01E01",
+    title: "The Heirs of the Dragon",
+    summary:
+      "Viserys loses both wife and newborn son, then names Rhaenyra heir after Daemon becomes politically unacceptable.",
+    whyItMatters:
+      "The entire conflict starts with a succession decision the realm never fully accepts.",
+  },
+  {
+    season: 1,
+    episode: 5,
+    code: "S01E05",
+    title: "We Light the Way",
+    summary:
+      "Rhaenyra marries Laenor Velaryon, Alicent chooses the green dress, and the court's private fractures become public faction lines.",
+    whyItMatters:
+      "The Greens and Blacks begin to harden into political identities.",
+  },
+  {
+    season: 1,
+    episode: 7,
+    code: "S01E07",
+    title: "Driftmark",
+    summary:
+      "Aemond claims Vhagar and loses an eye after a fight with Rhaenyra's children. Alicent's rage exposes how little trust remains.",
+    whyItMatters:
+      "Vhagar changes the military balance, and the family wound becomes generational.",
+  },
+  {
+    season: 1,
+    episode: 8,
+    code: "S01E08",
+    title: "The Lord of the Tides",
+    summary:
+      "Viserys makes one last defense of Rhaenyra and her sons, then dies after Alicent misunderstands his final words about Aegon.",
+    whyItMatters:
+      "The misread prophecy becomes Alicent's moral cover for backing Aegon's coronation.",
+  },
+  {
+    season: 1,
+    episode: 9,
+    code: "S01E09",
+    title: "The Green Council",
+    summary:
+      "Alicent and Otto move to crown Aegon while Rhaenys refuses to burn the Greens during her escape on Meleys.",
+    whyItMatters:
+      "The Greens seize institutional power before Rhaenyra can respond.",
+  },
+  {
+    season: 1,
+    episode: 10,
+    code: "S01E10",
+    title: "The Black Queen",
+    summary:
+      "Rhaenyra is crowned on Dragonstone and tries to gather support, but Aemond and Vhagar kill Lucerys and Arrax at Storm's End.",
+    whyItMatters:
+      "The finale turns a contested succession into a personal war.",
+  },
+  {
+    season: 2,
+    episode: 1,
+    code: "S02E01",
+    title: "A Son for a Son",
+    summary:
+      "Rhaenyra grieves Lucerys, Daemon arranges Blood and Cheese, and Jaehaerys is murdered in the Red Keep.",
+    whyItMatters:
+      "The war's moral center breaks almost immediately.",
+  },
+  {
+    season: 2,
+    episode: 2,
+    code: "S02E02",
+    title: "Rhaenyra the Cruel",
+    summary:
+      "Both factions weaponize Jaehaerys's death. Rhaenyra rejects Daemon's lack of control, and Criston becomes Hand.",
+    whyItMatters:
+      "Propaganda, grief, and poor judgment start driving the conflict faster than strategy.",
+  },
+  {
+    season: 2,
+    episode: 4,
+    code: "S02E04",
+    title: "The Red Dragon and the Gold",
+    summary:
+      "At Rook's Rest, Rhaenys and Meleys die, Aegon and Sunfyre are gravely injured, and Aemond emerges as the dominant Green dragonrider.",
+    whyItMatters:
+      "The dragon war becomes real, and King's Landing loses an active king.",
+  },
+  {
+    season: 2,
+    episode: 5,
+    code: "S02E05",
+    title: "Regent",
+    summary:
+      "Aemond becomes Prince Regent while Aegon lies injured. Rhaenyra makes Corlys her Hand and looks for ways to answer Vhagar.",
+    whyItMatters:
+      "Green power shifts from Aegon to Aemond, and Rhaenyra needs new dragon leverage.",
+  },
+  {
+    season: 2,
+    episode: 7,
+    code: "S02E07",
+    title: "The Red Sowing",
+    summary:
+      "Rhaenyra's dragonseed plan works at terrible cost: Hugh claims Vermithor, Ulf claims Silverwing, and Aemond retreats from Dragonstone.",
+    whyItMatters:
+      "The Blacks gain enough dragon power to challenge Vhagar directly.",
+  },
+  {
+    season: 2,
+    episode: 8,
+    code: "S02E08",
+    title: "The Queen Who Ever Was",
+    summary:
+      "Daemon swears fealty to Rhaenyra at Harrenhal, Alicent secretly offers a path into King's Landing, Aegon escapes with Larys, Aemond lashes out with Vhagar, and armies begin moving.",
+    whyItMatters:
+      "The finale positions every major power for open war before S03E01.",
+  },
+];
+
+const HOTD_NODES: GraphNode[] = [
+  {
+    id: "rhaenyra",
+    name: "Rhaenyra Targaryen",
+    x: 390,
+    y: 250,
+    sketch:
+      "Rhaenyra ends season 2 with stronger dragon leverage and Daemon's public fealty, but accepting Alicent's plan would require Aegon's death. Her claim is stronger than it has been all season, and more costly.",
+  },
+  {
+    id: "daemon",
+    name: "Daemon Targaryen",
+    x: 160,
+    y: 245,
+    sketch:
+      "Daemon's Harrenhal isolation, visions, and Alys Rivers's influence end with him bending the knee to Rhaenyra. The immediate question is whether that loyalty holds under wartime pressure.",
+  },
+  {
+    id: "alicent",
+    name: "Alicent Hightower",
+    x: 580,
+    y: 250,
+    sketch:
+      "Alicent has lost control of the Green war machine and secretly approaches Rhaenyra with a surrender path. She wants escape and survival, but the throne problem now centers on Aegon.",
+  },
+  {
+    id: "aegon",
+    name: "Aegon II Targaryen",
+    x: 690,
+    y: 155,
+    sketch:
+      "Aegon is badly injured after Rook's Rest and no longer ruling from the throne. Larys moves him out of King's Landing as a survival play.",
+  },
+  {
+    id: "aemond",
+    name: "Aemond Targaryen",
+    x: 690,
+    y: 350,
+    sketch:
+      "Aemond rules as Prince Regent with Vhagar, but the new Black dragonriders blunt his advantage. His destruction of Sharp Point shows how dangerous his frustration has become.",
+  },
+  {
+    id: "helaena",
+    name: "Helaena Targaryen",
+    x: 520,
+    y: 115,
+    sketch:
+      "Helaena refuses Aemond's demand to fly Dreamfyre into battle and speaks with prophetic certainty. She is not acting as a conventional political player, but she knows more than others understand.",
+  },
+  {
+    id: "jace",
+    name: "Jacaerys Velaryon",
+    x: 335,
+    y: 95,
+    sketch:
+      "Jace has helped secure Northern and Frey support, but the dragonseed plan threatens his sense of legitimacy and succession.",
+  },
+  {
+    id: "corlys",
+    name: "Corlys Velaryon",
+    x: 245,
+    y: 385,
+    sketch:
+      "Corlys is Rhaenyra's Hand and commands naval leverage, but his family losses and his unresolved relationship with Alyn complicate his position.",
+  },
+  {
+    id: "addam",
+    name: "Addam of Hull",
+    x: 120,
+    y: 365,
+    sketch:
+      "Addam has claimed Seasmoke and becomes one of Rhaenyra's new dragonriders. His presence gives the Blacks new power and raises questions around Velaryon blood.",
+  },
+  {
+    id: "hugh",
+    name: "Hugh Hammer",
+    x: 115,
+    y: 125,
+    sketch:
+      "Hugh survives the Red Sowing and claims Vermithor. The Blacks gain a major dragon, but the new riders are not old political insiders.",
+  },
+  {
+    id: "ulf",
+    name: "Ulf White",
+    x: 245,
+    y: 80,
+    sketch:
+      "Ulf claims Silverwing and immediately changes the visible dragon balance. His behavior already worries Jace.",
+  },
+  {
+    id: "larys",
+    name: "Larys Strong",
+    x: 760,
+    y: 235,
+    sketch:
+      "Larys chooses survival and long-game leverage by moving Aegon out of King's Landing. He is keeping the king alive as an asset.",
+  },
+];
+
+const HOTD_EDGES: GraphEdge[] = [
+  {
+    from: "rhaenyra",
+    to: "daemon",
+    type: "romantic",
+    label: "spouses and political partners, reset by Daemon's renewed oath",
+    establishedBy: "S02E08 Harrenhal fealty scene",
+  },
+  {
+    from: "rhaenyra",
+    to: "alicent",
+    type: "unknown",
+    label: "former friends negotiating a surrender path neither can fully control",
+    establishedBy: "S02E08 secret Dragonstone meeting",
+  },
+  {
+    from: "rhaenyra",
+    to: "aegon",
+    type: "enemy",
+    label: "rival claimants; Rhaenyra says Aegon must die to secure the throne",
+    establishedBy: "S02E08 Alicent negotiation",
+  },
+  {
+    from: "rhaenyra",
+    to: "aemond",
+    type: "enemy",
+    label: "Aemond killed Lucerys and now rules the Greens' war posture",
+    establishedBy: "S01E10 Lucerys death and S02E05 regency",
+  },
+  {
+    from: "aemond",
+    to: "aegon",
+    type: "betrayal",
+    label: "Aegon is injured at Rook's Rest after Aemond burns through the dragon fight",
+    establishedBy: "S02E04 Rook's Rest",
+  },
+  {
+    from: "aemond",
+    to: "helaena",
+    type: "control",
+    label: "Aemond pressures Helaena to use Dreamfyre; she refuses",
+    establishedBy: "S02E08 Red Keep confrontation",
+  },
+  {
+    from: "larys",
+    to: "aegon",
+    type: "ally",
+    label: "Larys moves Aegon out of the city to preserve a future claim",
+    establishedBy: "S02E08 escape plan",
+  },
+  {
+    from: "rhaenyra",
+    to: "jace",
+    type: "family",
+    label: "mother and heir, strained by the dragonseed legitimacy problem",
+    establishedBy: "S02E07 dragonseed aftermath",
+  },
+  {
+    from: "rhaenyra",
+    to: "corlys",
+    type: "ally",
+    label: "Corlys serves as Hand and naval power behind her claim",
+    establishedBy: "S02E05 Corlys appointed Hand",
+  },
+  {
+    from: "rhaenyra",
+    to: "addam",
+    type: "ally",
+    label: "Addam and Seasmoke become part of her expanded dragon force",
+    establishedBy: "S02E07 Red Sowing result",
+  },
+  {
+    from: "rhaenyra",
+    to: "hugh",
+    type: "ally",
+    label: "Hugh claims Vermithor under Rhaenyra's dragonseed plan",
+    establishedBy: "S02E07 Red Sowing",
+  },
+  {
+    from: "rhaenyra",
+    to: "ulf",
+    type: "ally",
+    label: "Ulf claims Silverwing, but his reliability is uncertain",
+    establishedBy: "S02E07 and S02E08 council tension",
+  },
+  {
+    from: "jace",
+    to: "ulf",
+    type: "threat",
+    label: "Ulf's status as a new dragonrider threatens Jace's confidence in blood legitimacy",
+    establishedBy: "S02E08 Jace anger over Ulf",
+  },
+  {
+    from: "corlys",
+    to: "addam",
+    type: "family",
+    label: "Addam's Velaryon connection sits underneath his sudden importance",
+    establishedBy: "S02E06-S02E08 Hull family thread",
+  },
+];
+
+const HOTD_STATUS: CharacterStatus[] = [
+  {
+    name: "Rhaenyra Targaryen",
+    state: "On Dragonstone with more dragon power and Daemon's renewed loyalty.",
+    motivation: "Take the throne without letting the realm's violence erase her claim's moral basis.",
+    knowledge:
+      "Knows Alicent is willing to open King's Landing, and knows the price includes Aegon.",
+    risk: "Her strongest path to the throne now demands irreversible bloodshed.",
+    establishedBy: "S02E08 Dragonstone negotiation and Harrenhal arrival",
+  },
+  {
+    name: "Daemon Targaryen",
+    state: "At Harrenhal, publicly aligned with Rhaenyra after his vision.",
+    motivation: "Serve Rhaenyra's larger claim after seeing himself as part of a bigger story.",
+    knowledge:
+      "Has seen a prophetic vision through the weirwood, but the political value of that knowledge is unclear.",
+    risk: "His loyalty looks restored, but his judgment has been unstable all season.",
+    establishedBy: "S02E08 weirwood vision and fealty",
+  },
+  {
+    name: "Alicent Hightower",
+    state: "Secretly negotiating outside the Green council's control.",
+    motivation: "Escape the war machine she helped empower and save who she can.",
+    knowledge:
+      "Knows Aemond is dangerous and that King's Landing may be surrendered, but not that Aegon is being moved by Larys.",
+    risk: "Her offer collapses if Aegon is not available or if Aemond acts first.",
+    establishedBy: "S02E08 Dragonstone meeting",
+  },
+  {
+    name: "Aegon II Targaryen",
+    state: "Badly injured and being removed from King's Landing by Larys.",
+    motivation: "Survive long enough to matter again.",
+    knowledge:
+      "Knows his body and rule are broken for now, and Larys frames survival as the only move.",
+    risk: "He remains the central obstacle to Rhaenyra securing the throne.",
+    establishedBy: "S02E04 Rook's Rest and S02E08 Larys plan",
+  },
+  {
+    name: "Aemond Targaryen",
+    state: "Prince Regent with Vhagar, but facing a stronger Black dragon lineup.",
+    motivation: "Force victory through fear, speed, and dragon dominance.",
+    knowledge:
+      "Knows Rhaenyra has new dragonriders and that Helaena will not easily submit to his command.",
+    risk: "His rage can burn allies and enemies alike.",
+    establishedBy: "S02E05 regency, S02E07 retreat, S02E08 Sharp Point",
+  },
+  {
+    name: "Helaena Targaryen",
+    state: "Still in King's Landing, refusing Aemond's order to fly Dreamfyre.",
+    motivation: "Avoid becoming a weapon in a war she reads differently from everyone else.",
+    knowledge:
+      "Speaks with prophetic certainty about Aemond and Aegon, but does not explain it as normal strategy.",
+    risk: "Her knowledge makes her powerful, isolated, and vulnerable.",
+    establishedBy: "S02E08 Red Keep confrontation",
+  },
+  {
+    name: "Jacaerys Velaryon",
+    state: "Rhaenyra's heir, watching new dragonriders change the rules around legitimacy.",
+    motivation: "Protect his mother's claim and his own place in the succession.",
+    knowledge:
+      "Understands the dragonseed plan helps the war while weakening the old bloodline argument.",
+    risk: "Resentment toward Hugh and Ulf could fracture the Black side from within.",
+    establishedBy: "S02E07-S02E08 dragonseed fallout",
+  },
+  {
+    name: "Corlys Velaryon",
+    state: "Hand to Rhaenyra and central naval actor for the Blacks.",
+    motivation: "Keep his house relevant after major losses.",
+    knowledge:
+      "Knows Alyn and Addam matter to his house's future, even as Alyn rejects easy reconciliation.",
+    risk: "The fleet conflict can pull House Velaryon into the war's first major escalation.",
+    establishedBy: "S02E05 Hand appointment and S02E08 Alyn confrontation",
+  },
+];
+
+const HOTD_SECRETS: SecretFact[] = [
+  {
+    topic: "Alicent's surrender offer",
+    whatToRemember:
+      "Alicent tells Rhaenyra she can help open King's Landing, but Rhaenyra says Aegon must die.",
+    whoKnows: "Alicent and Rhaenyra",
+    whoIsAffected: "Aegon, Aemond, Helaena, King's Landing, the Black council",
+    establishedBy: "S02E08 Dragonstone meeting",
+    whyItMatters:
+      "The most peaceful-looking route still carries a fatal succession cost.",
+  },
+  {
+    topic: "Aegon's escape",
+    whatToRemember:
+      "Larys moves the injured Aegon out of King's Landing rather than leaving him exposed.",
+    whoKnows: "Aegon and Larys",
+    whoIsAffected: "Alicent, Rhaenyra, Aemond, the Green claim",
+    establishedBy: "S02E08 Larys plan",
+    whyItMatters:
+      "Alicent's plan depends on a political piece she may no longer control.",
+  },
+  {
+    topic: "Daemon's vision",
+    whatToRemember:
+      "Daemon sees a larger threat and future through the weirwood, then swears fealty to Rhaenyra.",
+    whoKnows: "Daemon and Alys Rivers",
+    whoIsAffected: "Rhaenyra, the Riverlands host, the Black war effort",
+    establishedBy: "S02E08 Harrenhal weirwood",
+    whyItMatters:
+      "The suspected break between Daemon and Rhaenyra resolves into renewed alignment.",
+  },
+  {
+    topic: "New dragonriders",
+    whatToRemember:
+      "Addam has Seasmoke, Hugh has Vermithor, and Ulf has Silverwing.",
+    whoKnows: "The Black leadership, Aemond after seeing the dragon lineup",
+    whoIsAffected: "Rhaenyra, Jace, Aemond, the Greens",
+    establishedBy: "S02E07 Red Sowing and S02E08 aftermath",
+    whyItMatters:
+      "The dragon balance no longer belongs mainly to Vhagar.",
+  },
+  {
+    topic: "Helaena's refusal",
+    whatToRemember:
+      "Helaena refuses Aemond's demand that she ride Dreamfyre into battle.",
+    whoKnows: "Helaena and Aemond",
+    whoIsAffected: "Aemond's war plan, the Green dragon count",
+    establishedBy: "S02E08 Red Keep confrontation",
+    whyItMatters:
+      "Aemond cannot simply convert every Green dragon into obedient military power.",
+  },
+  {
+    topic: "Otto's location",
+    whatToRemember:
+      "Otto is glimpsed as a captive, but the bounded facts do not explain who holds him.",
+    whoKnows: "The viewer knows Otto is captive; the fixture does not assign wider knowledge.",
+    whoIsAffected: "Alicent, the Hightower network, the Green council",
+    establishedBy: "S02E08 final montage",
+    whyItMatters:
+      "A key Green strategist is absent at the moment the war expands.",
+  },
+];
+
+const HOTD_QUESTIONS: string[] = [
+  "Rhaenyra has more dragons, Daemon's oath, and a possible path into King's Landing.",
+  "Alicent's offer is real, but Aegon may no longer be where she thinks he is.",
+  "Aemond has Vhagar and the regency, but his intimidation advantage has weakened.",
+  "Hugh, Ulf, and Addam are powerful new riders, not fully trusted political insiders.",
+  "Jace's anxiety is about legitimacy as much as strategy.",
+  "Corlys is Hand, but his family and fleet questions are unresolved.",
+  "Helaena is refusing to become Aemond's weapon.",
+  "The armies and fleets are finally moving into open war.",
+];
+
+const HOTD_STORY_STATES: Record<string, StoryState> = {
+  S02E08: {
+    boundaryCode: "S02E08",
+    coverageGate: HOTD_COVERAGE_GATE,
+    nodes: HOTD_NODES,
+    edges: HOTD_EDGES,
+    characterStatus: HOTD_STATUS,
+    secrets: HOTD_SECRETS,
+    openQuestions: HOTD_QUESTIONS,
+  },
+};
+
+export const HOTD_RECAP: Recap = {
+  slug: "house-of-the-dragon-s2",
+  series: "House of the Dragon",
+  platform: "HBO / Max",
+  defaultBoundary: { season: 2, episode: 8 },
+  watchedThrough: "S02E08 - The Queen Who Ever Was",
+  nextEpisode: "S03E01",
+  releaseContext:
+    "Season 3 premieres June 21, 2026, so this path is framed as a release-week readiness demo.",
+  spoilerBoundary:
+    "No Season 3 episode events, reviews, trailer beats, casting implications, or book-forward speculation.",
+  sourceNote:
+    "Prototype facts are manually structured from bounded Season 1-2 episode recaps and finale summaries. Season 3 reviews, trailers, and Fire & Blood future events are excluded from the user-facing recap.",
+  coverageGate: HOTD_COVERAGE_GATE,
+  sourceFacts: HOTD_SOURCE_FACTS,
+  seasonSummaries: HOTD_SEASON_SUMMARIES,
+  episodeSummaries: HOTD_EPISODE_SUMMARIES,
+  storyStates: HOTD_STORY_STATES,
+  nodes: HOTD_NODES,
+  edges: HOTD_EDGES,
+  characterStatus: HOTD_STATUS,
+  secrets: HOTD_SECRETS,
+  openQuestions: HOTD_QUESTIONS,
+};
+
 export const RECAPS: Record<string, Recap> = {
   "the-boys-s4-finale": THE_BOYS_RECAP,
+  "house-of-the-dragon-s2": HOTD_RECAP,
 };
 
 export function getRecap(slug: string): Recap | null {

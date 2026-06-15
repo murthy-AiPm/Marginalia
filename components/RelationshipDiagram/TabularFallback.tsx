@@ -78,6 +78,11 @@ export default function TabularFallback({
                 </td>
                 <td className="px-4 py-2.5 text-[var(--color-ink-muted)]">
                   {edge.label}
+                  {edge.establishedBy && (
+                    <span className="block mt-1 text-[12px] text-[var(--color-ink-faint)]">
+                      Established by: {edge.establishedBy}
+                    </span>
+                  )}
                 </td>
               </tr>
             );
